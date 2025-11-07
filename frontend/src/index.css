@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for gradients or specific effects */
+.gradient-text {
+  background-image: linear-gradient(to right, #8B5CF6, #EC4899); /* indigo-400 to pink-500 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@layer utilities {
+  .glow {
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.6),
+      0 0 20px rgba(236, 72, 153, 0.4);
+  }
+}
+
+
+
+
+@keyframes bounce-x {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+}
+.animate-bounce-x {
+  animation: bounce-x 1.5s infinite ease-in-out;
+}
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+}
