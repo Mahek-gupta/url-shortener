@@ -77,7 +77,7 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-20 bg-[#0f0f1a] text-center overflow-hidden">
+    <section id="features" className="py-20 bg-[#0f0f1a] text-center overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
         <h2 className="text-3xl md:text-4xl font-extrabold mb-14 text-white text-left">
           Features
