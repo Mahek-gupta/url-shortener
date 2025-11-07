@@ -4,7 +4,7 @@ import { Github, Twitter, Linkedin } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[#0f0f1a] text-gray-400 py-12 overflow-hidden border-t border-white/10 backdrop-blur-md">
+    <footer id="contact" className="relative bg-[#0f0f1a] text-gray-400 py-12 overflow-hidden border-t border-white/10 backdrop-blur-md">
       {/* Glow background effect */}
       <div className="absolute inset-0 bg-gradient-to-tr from-purple-600/10 via-pink-500/5 to-transparent blur-3xl"></div>
 
