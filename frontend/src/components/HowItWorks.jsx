@@ -43,7 +43,7 @@ const item = {
 
 const HowItWorks = () => {
   return (
-    <section className="relative py-24 bg-[#0f0f1a] overflow-hidden text-white">
+    <section id="docs" className="relative py-24 bg-[#0f0f1a] overflow-hidden text-white">
       {/* --- Background glow --- */}
       <div className="absolute inset-0  blur-3xl"></div>
 
