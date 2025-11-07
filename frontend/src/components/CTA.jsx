@@ -1,27 +1,3 @@
-// import React from 'react';
-
-// const CTA = () => {
-//   return (
-//     <section className="py-16 bg-primary-purple text-dark-text text-center">
-//       <div className="container mx-auto px-4">
-//         <h2 className="text-3xl md:text-4xl font-extrabold mb-6">
-//           Start shortening your URLs today — it’s free!
-//         </h2>
-//         <button className="bg-white text-primary-purple px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-200 transition-colors duration-300">
-//           Get Started
-//         </button>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default CTA;
-
-
-
-
-
-
 import React from "react";
 import { motion } from "framer-motion";
 
