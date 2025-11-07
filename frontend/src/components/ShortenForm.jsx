@@ -33,7 +33,7 @@ const ShortenForm = ({ onLinkShortened }) => {
         headers['Authorization'] = `Bearer ${token}`; // Add token for authenticated requests
       }
 
-      const response = await fetch('http://localhost:5000/api/shorten', {
+      const response = await fetch('https://backend-url-shortener1.onrender.com/api/shorten', {
         method: 'POST',
         headers: headers, // Use the headers object
         body: JSON.stringify({ longUrl }),
@@ -45,7 +45,7 @@ const ShortenForm = ({ onLinkShortened }) => {
       }
 
       const data = await response.json();
-      setShortUrl(`http://localhost:5000/${data.shortCode}`);
+      setShortUrl(`https://backend-url-shortener1.onrender.com/${data.shortCode}`);
       toast.success('URL shortened successfully!');
 
       // NEW: Call the callback function if provided
