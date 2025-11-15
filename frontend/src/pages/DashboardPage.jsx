@@ -1,17 +1,8 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 import ShortenForm from "../components/ShortenForm";
 import AnalyticsModal from "../components/AnalyticsModal"; // ✅ Import modal
-=======
-// client/src/pages/DashboardPage.jsx
-import React, { useState, useEffect, useCallback } from 'react'; // Import useCallback
-import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import ShortenForm from '../components/ShortenForm';
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
 
 const DashboardPage = () => {
   const { user, token, logout } = useAuth();
@@ -35,15 +26,8 @@ const DashboardPage = () => {
     setErrorLinks(null);
 
     try {
-<<<<<<< HEAD
       const response = await fetch("http://localhost:5000/api/user/links", {
         headers: { Authorization: `Bearer ${token}` },
-=======
-      const response = await fetch('https://backend-url-shortener1.onrender.com/api/user/links', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
       });
 
       const data = await response.json();
@@ -156,7 +140,6 @@ const DashboardPage = () => {
                         {link.longUrl}
                       </a>
                     </td>
-<<<<<<< HEAD
                     <td className="px-6 py-4 text-sm font-medium text-primary-purple">
                       <a
                         href={link.shortUrl}
@@ -165,11 +148,6 @@ const DashboardPage = () => {
                         className="hover:underline"
                       >
                         {link.shortUrl}
-=======
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-purple">
-                      <a href={`https://backend-url-shortener1.onrender.com/${link.shortCode}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                        {`https://backend-url-shortener1.onrender.com/${link.shortCode}`}
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
                       </a>
                     </td>
                     <td className="px-6 py-4 text-sm dark:text-gray-300 text:bg-dark-bg">{link.clicks ?? 0}</td>

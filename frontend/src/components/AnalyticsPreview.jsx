@@ -44,15 +44,9 @@ const cardHover = {
 
 const AnalyticsPreview = () => {
   return (
-<<<<<<< HEAD
     <section id="pricing" className="relative py-24 overflow-hidden text-gray-900 dark:text-white bg-white/80 dark:bg-[#0f0f1a] transition-colors duration-500">
       {/* Background glow */}
       <div className="absolute inset-0 blur-3xl"></div>
-=======
-    <section id="pricing" className="relative bg-[#0f0f1a] py-24 overflow-hidden text-white">
-      {/* Background gradient glow */}
-      <div className="absolute inset-0  blur-3xl"></div>
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
 
       <div className="relative max-w-6xl mx-auto px-6">
         {/* Section heading */}

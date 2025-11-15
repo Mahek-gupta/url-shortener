@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
@@ -6,15 +5,6 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useAuth } from "../context/AuthContext";
 import AnalyticsModal from "./AnalyticsModal";
 
-=======
-// client/src/components/ShortenForm.jsx
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'react-hot-toast';
-import { useAuth } from '../context/AuthContext'; // Import useAuth to get the token
-
-// Accept onLinkShortened prop
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
 const ShortenForm = ({ onLinkShortened }) => {
   const [longUrl, setLongUrl] = useState("");
   const [customAlias, setCustomAlias] = useState("");
@@ -44,26 +34,14 @@ const ShortenForm = ({ onLinkShortened }) => {
       if (isAuthenticated && token)
         headers["Authorization"] = `Bearer ${token}`;
 
-<<<<<<< HEAD
       const response = await fetch("http://localhost:5000/api/shorten", {
         method: "POST",
         headers,
         body: JSON.stringify({ longUrl, customAlias, expiresAt }),
-=======
-      const response = await fetch('https://backend-url-shortener1.onrender.com/api/shorten', {
-        method: 'POST',
-        headers: headers, // Use the headers object
-        body: JSON.stringify({ longUrl }),
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
       });
 
       const data = await response.json();
-<<<<<<< HEAD
       if (!response.ok) throw new Error(data.message || "Failed to shorten URL");
-=======
-      setShortUrl(`https://backend-url-shortener1.onrender.com/${data.shortCode}`);
-      toast.success('URL shortened successfully!');
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
 
       setShortUrl(data.shortUrl);
       setQrCode(data.qrCode);
@@ -287,3 +265,8 @@ const ShortenForm = ({ onLinkShortened }) => {
 };
 
 export default ShortenForm;
+
+
+
+
+// https://backend-url-shortener1.onrender.com

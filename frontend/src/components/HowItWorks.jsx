@@ -43,13 +43,9 @@ const item = {
 
 const HowItWorks = () => {
   return (
-<<<<<<< HEAD
     <section
       className="relative py-24 bg-white/80 text-gray-800 dark:bg-[#0f0f1a] dark:text-white overflow-hidden transition-colors duration-500"
     >
-=======
-    <section id="docs" className="relative py-24 bg-[#0f0f1a] overflow-hidden text-white">
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
       {/* --- Background glow --- */}
       <div className="absolute inset-0 blur-3xl"></div>
 
@@ -197,9 +193,6 @@ const HowItWorks = () => {
 };
 
 export default HowItWorks;
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada

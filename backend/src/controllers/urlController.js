@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 
 // // server/src/controllers/urlController.js
 // import { nanoid } from 'nanoid';
@@ -445,12 +445,6 @@ import QRCode from "qrcode";
 import geoip from "geoip-lite";
 import Url from "../models/Url.js";
 import config from "../config/index.js";
-=======
-// server/src/controllers/urlController.js
-import { nanoid } from 'nanoid';
-import Url from '../models/Url.js';
-import config from '../config/index.js';
->>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
 
 const BASE_URL = process.env.BASE_URL || config.baseUrl;
 
