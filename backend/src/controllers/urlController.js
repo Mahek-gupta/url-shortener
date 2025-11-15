@@ -1,43 +1,35 @@
+
 // // server/src/controllers/urlController.js
 // import { nanoid } from 'nanoid';
 // import Url from '../models/Url.js';
-// import config from '../config/index.js'; // Import config for BASE_URL
+// import config from '../config/index.js';
 
-// const BASE_URL = config.baseUrl;
+// const BASE_URL = process.env.BASE_URL || config.baseUrl;
 
 // // @desc    Shorten a URL
 // // @route   POST /api/shorten
 // // @access  Public (or Private if auth is required)
 // const shortenUrl = async (req, res) => {
-//   const { longUrl, customCode } = req.body; // Added customCode option
-//   // const userId = req.user?._id; // Get user ID from authenticated request if available
+//   const { longUrl, customCode } = req.body;
+//   const userId = req.user?._id; // Optional user ID if authenticated
 
-//   if (!longUrl) {
-//     return res.status(400).json({ message: 'URL is required' });
-//   }
-
-//   // Basic URL validation (more robust validation might be needed)
-//   if (!longUrl.startsWith('http://') && !longUrl.startsWith('https://')) {
+//   if (!longUrl) return res.status(400).json({ message: 'URL is required' });
+//   if (!longUrl.startsWith('http://') && !longUrl.startsWith('https://'))
 //     return res.status(400).json({ message: 'URL must start with http:// or https://' });
-//   }
 
 //   try {
 //     let shortCode;
 //     if (customCode) {
-//       // Validate custom code
-//       if (!/^[a-zA-Z0-9_-]{4,15}$/.test(customCode)) { // Example regex for custom codes
+//       if (!/^[a-zA-Z0-9_-]{4,15}$/.test(customCode))
 //         return res.status(400).json({ message: 'Custom code must be 4-15 alphanumeric characters, hyphens, or underscores.' });
-//       }
+
 //       const existingCustom = await Url.findOne({ shortCode: customCode });
-//       if (existingCustom) {
-//         return res.status(409).json({ message: 'Custom code already in use.' });
-//       }
+//       if (existingCustom) return res.status(409).json({ message: 'Custom code already in use.' });
 //       shortCode = customCode;
 //     } else {
-//       // Generate a unique short code
 //       let unique = false;
 //       while (!unique) {
-//         const generatedCode = nanoid(8); // Generate 8-character short code
+//         const generatedCode = nanoid(8);
 //         const existing = await Url.findOne({ shortCode: generatedCode });
 //         if (!existing) {
 //           shortCode = generatedCode;
@@ -46,17 +38,12 @@
 //       }
 //     }
 
-//     const newUrl = new Url({
-//       longUrl,
-//       shortCode,
-//       // user: userId, // Assign user if authenticated
-//     });
-
+//     const newUrl = new Url({ longUrl, shortCode, user: userId });
 //     await newUrl.save();
 
 //     res.status(201).json({
 //       originalUrl: longUrl,
-//       shortCode: shortCode,
+//       shortCode,
 //       shortUrl: `${BASE_URL}/${shortCode}`,
 //     });
 //   } catch (error) {
@@ -67,21 +54,16 @@
 
 // // @desc    Redirect to original URL and track clicks
 // // @route   GET /:shortCode
-// // @access  Public
 // const redirectToOriginalUrl = async (req, res) => {
 //   const { shortCode } = req.params;
-
 //   try {
 //     const urlEntry = await Url.findOne({ shortCode });
+//     if (!urlEntry) return res.status(404).json({ message: 'Short URL not found' });
 
-//     if (urlEntry) {
-//       urlEntry.clicks++;
-//       await urlEntry.save();
-//       return res.redirect(urlEntry.longUrl);
-//     } else {
-//       // If short URL not found, you can redirect to a custom 404 page or homepage
-//       return res.status(404).json({ message: 'Short URL not found or has expired' });
-//     }
+//     urlEntry.clicks++;
+//     await urlEntry.save();
+
+//     return res.redirect(urlEntry.longUrl);
 //   } catch (error) {
 //     console.error(`Error redirecting URL: ${error.message}`);
 //     res.status(500).json({ message: 'Server error during redirection' });
@@ -90,41 +72,30 @@
 
 // // @desc    Get analytics for a short URL
 // // @route   GET /api/analytics/:shortCode
-// // @access  Private (should be protected by auth middleware)
 // const getUrlAnalytics = async (req, res) => {
 //   const { shortCode } = req.params;
-//   // const userId = req.user._id; // Ensure only owner can view analytics
 
 //   try {
-//     const urlEntry = await Url.findOne({ shortCode /*, user: userId */ }); // Filter by user if auth
-//     if (!urlEntry) {
-//       return res.status(404).json({ message: 'Short URL not found or you do not have access' });
-//     }
+//     const urlEntry = await Url.findOne({ shortCode });
+//     if (!urlEntry) return res.status(404).json({ message: 'Short URL not found' });
 
-//     // This is a basic example. Real analytics would query a more detailed log/collection.
 //     res.json({
 //       longUrl: urlEntry.longUrl,
 //       shortCode: urlEntry.shortCode,
 //       totalClicks: urlEntry.clicks,
 //       createdAt: urlEntry.createdAt,
-//       // Placeholder for advanced analytics data
 //       dailyClicks: [
-//         { date: '2023-01-01', count: Math.floor(Math.random() * 50) + 10 },
-//         { date: '2023-01-02', count: Math.floor(Math.random() * 50) + 10 },
-//         { date: '2023-01-03', count: Math.floor(Math.random() * 50) + 10 },
-//         { date: '2023-01-04', count: Math.floor(Math.random() * 50) + 10 },
-//         { date: '2023-01-05', count: Math.floor(Math.random() * 50) + 10 },
-//         { date: '2023-01-06', count: Math.floor(Math.random() * 50) + 10 },
-//         { date: '2023-01-07', count: Math.floor(Math.random() * 50) + 10 },
+//         { date: '2025-01-01', count: 45 },
+//         { date: '2025-01-02', count: 62 },
+//         { date: '2025-01-03', count: 31 },
 //       ],
 //       topCountries: [
-//         { country: 'US', clicks: Math.floor(Math.random() * 100) + 50 },
-//         { country: 'IN', clicks: Math.floor(Math.random() * 50) + 20 },
-//         { country: 'DE', clicks: Math.floor(Math.random() * 30) + 10 },
+//         { country: 'US', clicks: 100 },
+//         { country: 'IN', clicks: 70 },
 //       ],
 //       topReferrers: [
-//         { referrer: 'google.com', clicks: Math.floor(Math.random() * 50) + 10 },
-//         { referrer: 'facebook.com', clicks: Math.floor(Math.random() * 30) + 5 },
+//         { referrer: 'google.com', clicks: 50 },
+//         { referrer: 'facebook.com', clicks: 20 },
 //       ],
 //     });
 //   } catch (error) {
@@ -133,16 +104,11 @@
 //   }
 // };
 
-
-
-// // server/src/controllers/urlController.js (add this function)
-
-// // @desc    Get all URLs for the authenticated user
+// // @desc    Get all URLs for authenticated user
 // // @route   GET /api/user/links
-// // @access  Private (requires protect middleware)
+// // @access  Private
 // const getUserUrls = async (req, res) => {
-//   const userId = req.user._id; // User ID is available from the protect middleware
-
+//   const userId = req.user._id;
 //   try {
 //     const userUrls = await Url.find({ user: userId }).sort({ createdAt: -1 });
 //     res.json(userUrls);
@@ -152,9 +118,7 @@
 //   }
 // };
 
-// export { shortenUrl, redirectToOriginalUrl, getUrlAnalytics, getUserUrls }; // Export new function
-
-// // export { shortenUrl, redirectToOriginalUrl, getUrlAnalytics };
+// export { shortenUrl, redirectToOriginalUrl, getUrlAnalytics, getUserUrls };
 
 
 
@@ -166,124 +130,583 @@
 
 
 
+// import { nanoid } from 'nanoid';
+// import QRCode from 'qrcode';
+// import Url from '../models/Url.js';
+// import config from '../config/index.js';
 
-// server/src/controllers/urlController.js
-import { nanoid } from 'nanoid';
-import Url from '../models/Url.js';
-import config from '../config/index.js';
+// const BASE_URL = process.env.BASE_URL || config.baseUrl;
+
+// // 🟢 1. Shorten URL + QR Code + Expiration + Custom Alias
+// export const shortenUrl = async (req, res) => {
+//   try {
+//     const { longUrl, customAlias, expiresAt } = req.body;
+//     const userId = req.user?._id;
+
+//     if (!longUrl)
+//       return res.status(400).json({ message: 'URL is required' });
+//     if (!longUrl.startsWith('http://') && !longUrl.startsWith('https://'))
+//       return res.status(400).json({ message: 'URL must start with http:// or https://' });
+
+//     let shortCode;
+
+//     // 🧩 Check custom alias availability
+//     if (customAlias) {
+//       const existingAlias = await Url.findOne({ shortCode: customAlias });
+//       if (existingAlias)
+//         return res.status(409).json({ message: 'Custom alias already in use' });
+//       shortCode = customAlias;
+//     } else {
+//       // Auto generate random short code
+//       let unique = false;
+//       while (!unique) {
+//         const generatedCode = nanoid(8);
+//         const existing = await Url.findOne({ shortCode: generatedCode });
+//         if (!existing) {
+//           shortCode = generatedCode;
+//           unique = true;
+//         }
+//       }
+//     }
+
+//     const shortUrl = `${BASE_URL}/${shortCode}`;
+
+//     // 🧾 Generate QR Code (base64 format)
+//     const qrCode = await QRCode.toDataURL(shortUrl);
+
+//     // ⏰ Set expiry date if provided
+//     const expiryDate = expiresAt ? new Date(expiresAt) : null;
+
+//     const newUrl = new Url({
+//       longUrl,
+//       shortCode,
+//       shortUrl,
+//       qrCode,
+//       user: userId || null,
+//       expiresAt: expiryDate,
+//       createdAt: new Date(),
+//     });
+
+//     await newUrl.save();
+
+//     return res.status(201).json({
+//       message: 'URL shortened successfully',
+//       originalUrl: longUrl,
+//       shortUrl,
+//       qrCode,
+//       expiresAt: expiryDate,
+//     });
+//   } catch (error) {
+//     console.error('Error shortening URL:', error.message);
+//     res.status(500).json({ message: 'Server error during URL shortening' });
+//   }
+// };
+
+// // 🟢 2. Redirect to original URL + record analytics
+// export const redirectToOriginalUrl = async (req, res) => {
+//   try {
+//     const { shortCode } = req.params;
+//     const urlEntry = await Url.findOne({ shortCode });
+
+//     if (!urlEntry)
+//       return res.status(404).json({ message: 'Short URL not found' });
+
+//     // Check if expired
+//     if (urlEntry.expiresAt && new Date() > urlEntry.expiresAt)
+//       return res.status(410).json({ message: 'This link has expired.' });
+
+//     // Track analytics info
+//     urlEntry.clicks += 1;
+//     urlEntry.analytics.push({
+//       timestamp: new Date(),
+//       ipAddress: req.ip,
+//       userAgent: req.headers['user-agent'],
+//       referer: req.headers['referer'] || 'Direct',
+//     });
+
+//     await urlEntry.save();
+
+//     return res.redirect(urlEntry.longUrl);
+//   } catch (error) {
+//     console.error('Error redirecting URL:', error.message);
+//     res.status(500).json({ message: 'Server error during redirection' });
+//   }
+// };
+
+// // 🟢 3. Get analytics for a short URL
+// export const getUrlAnalytics = async (req, res) => {
+//   try {
+//     const { shortCode } = req.params;
+//     const urlEntry = await Url.findOne({ shortCode });
+
+//     if (!urlEntry)
+//       return res.status(404).json({ message: 'Short URL not found' });
+
+//     const dailyClicks = {};
+//     urlEntry.analytics.forEach((entry) => {
+//       const day = new Date(entry.timestamp).toISOString().split('T')[0];
+//       dailyClicks[day] = (dailyClicks[day] || 0) + 1;
+//     });
+
+//     res.json({
+//       longUrl: urlEntry.longUrl,
+//       shortUrl: urlEntry.shortUrl,
+//       totalClicks: urlEntry.clicks,
+//       createdAt: urlEntry.createdAt,
+//       expiresAt: urlEntry.expiresAt,
+//       dailyClicks,
+//       recentActivity: urlEntry.analytics.slice(-5).reverse(),
+//     });
+//   } catch (error) {
+//     console.error('Error fetching analytics:', error.message);
+//     res.status(500).json({ message: 'Server error fetching analytics' });
+//   }
+// };
+
+// // 🟢 4. Get all URLs for authenticated user
+// export const getUserUrls = async (req, res) => {
+//   try {
+//     const userId = req.user._id;
+//     const userUrls = await Url.find({ user: userId }).sort({ createdAt: -1 });
+//     res.json(userUrls);
+//   } catch (error) {
+//     console.error('Error fetching user URLs:', error.message);
+//     res.status(500).json({ message: 'Server error fetching user URLs' });
+//   }
+// };
+
+// import { nanoid } from 'nanoid';
+// import QRCode from 'qrcode';
+// import Url from '../models/Url.js';
+// import config from '../config/index.js';
+
+// const BASE_URL = process.env.BASE_URL || config.baseUrl;
+
+// // 🟢 1. Shorten URL + QR Code + Expiration + Custom Alias
+// export const shortenUrl = async (req, res) => {
+//   try {
+//     const { longUrl, customAlias, expiresAt } = req.body;
+//     const userId = req.user?._id;
+
+//     if (!longUrl)
+//       return res.status(400).json({ message: 'URL is required' });
+
+//     // ✅ Ensure protocol (http/https)
+//     if (!/^https?:\/\//i.test(longUrl))
+//       return res.status(400).json({ message: 'URL must start with http:// or https://' });
+
+//     let shortCode;
+
+//     // ✅ Custom Alias Check
+//     if (customAlias) {
+//       const existingAlias = await Url.findOne({ shortCode: customAlias });
+//       if (existingAlias)
+//         return res.status(409).json({ message: 'Custom alias already in use' });
+//       shortCode = customAlias;
+//     } else {
+//       // ✅ Generate unique short code
+//       let isUnique = false;
+//       while (!isUnique) {
+//         const generatedCode = nanoid(8);
+//         const existing = await Url.findOne({ shortCode: generatedCode });
+//         if (!existing) {
+//           shortCode = generatedCode;
+//           isUnique = true;
+//         }
+//       }
+//     }
+
+//     const shortUrl = `${BASE_URL}/${shortCode}`;
+//     const qrCode = await QRCode.toDataURL(shortUrl);
+//     const expiryDate = expiresAt ? new Date(expiresAt) : null;
+
+//     // ✅ Save new URL
+//     const newUrl = new Url({
+//       longUrl,
+//       shortCode,
+//       shortUrl,
+//       qrCode,
+//       user: userId || null,
+//       expiresAt: expiryDate,
+//       createdAt: new Date(),
+//     });
+
+//     await newUrl.save();
+
+//     return res.status(201).json({
+//       message: 'URL shortened successfully',
+//       originalUrl: longUrl,
+//       shortUrl,
+//       qrCode,
+//       expiresAt: expiryDate,
+//     });
+//   } catch (error) {
+//     console.error('❌ Error shortening URL:', error.message);
+//     res.status(500).json({ message: 'Server error during URL shortening' });
+//   }
+// };
+
+// // 🟢 2. Redirect + Record Analytics
+// export const redirectToOriginalUrl = async (req, res) => {
+//   try {
+//     const { shortCode } = req.params;
+//     const urlEntry = await Url.findOne({ shortCode });
+
+//     if (!urlEntry)
+//       return res.status(404).json({ message: 'Short URL not found' });
+
+//     // ✅ Expiry Check
+//     if (urlEntry.expiresAt && new Date() > urlEntry.expiresAt)
+//       return res.status(410).json({ message: 'This link has expired.' });
+
+//     // ✅ Analytics tracking
+//     urlEntry.clicks += 1;
+//     urlEntry.analytics.push({
+//       timestamp: new Date(),
+//       ipAddress: req.ip,
+//       userAgent: req.headers['user-agent'],
+//       referer: req.headers['referer'] || 'Direct',
+//     });
+
+//     await urlEntry.save();
+
+//     // ✅ Redirect
+//     return res.redirect(urlEntry.longUrl);
+//   } catch (error) {
+//     console.error('❌ Error redirecting URL:', error.message);
+//     res.status(500).json({ message: 'Server error during redirection' });
+//   }
+// };
+
+// // 🟢 3. Get Analytics Data
+// export const getUrlAnalytics = async (req, res) => {
+//   try {
+//     const { shortCode } = req.params;
+//     const urlEntry = await Url.findOne({ shortCode });
+
+//     if (!urlEntry)
+//       return res.status(404).json({ message: 'Short URL not found' });
+
+//     // ✅ Compute daily clicks
+//     const dailyClicks = {};
+//     urlEntry.analytics.forEach((entry) => {
+//       const day = new Date(entry.timestamp).toISOString().split('T')[0];
+//       dailyClicks[day] = (dailyClicks[day] || 0) + 1;
+//     });
+
+//     res.json({
+//       longUrl: urlEntry.longUrl,
+//       shortUrl: urlEntry.shortUrl,
+//       totalClicks: urlEntry.clicks,
+//       createdAt: urlEntry.createdAt,
+//       expiresAt: urlEntry.expiresAt,
+//       dailyClicks,
+//       recentActivity: urlEntry.analytics.slice(-5).reverse(),
+//     });
+//   } catch (error) {
+//     console.error('❌ Error fetching analytics:', error.message);
+//     res.status(500).json({ message: 'Server error fetching analytics' });
+//   }
+// };
+
+// // 🟢 4. Get User URLs
+// export const getUserUrls = async (req, res) => {
+//   try {
+//     const userId = req.user._id;
+//     const userUrls = await Url.find({ user: userId }).sort({ createdAt: -1 });
+//     res.json(userUrls);
+//   } catch (error) {
+//     console.error('❌ Error fetching user URLs:', error.message);
+//     res.status(500).json({ message: 'Server error fetching user URLs' });
+//   }
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { nanoid } from "nanoid";
+import QRCode from "qrcode";
+import geoip from "geoip-lite";
+import Url from "../models/Url.js";
+import config from "../config/index.js";
 
 const BASE_URL = process.env.BASE_URL || config.baseUrl;
 
-// @desc    Shorten a URL
-// @route   POST /api/shorten
-// @access  Public (or Private if auth is required)
-const shortenUrl = async (req, res) => {
-  const { longUrl, customCode } = req.body;
-  const userId = req.user?._id; // Optional user ID if authenticated
-
-  if (!longUrl) return res.status(400).json({ message: 'URL is required' });
-  if (!longUrl.startsWith('http://') && !longUrl.startsWith('https://'))
-    return res.status(400).json({ message: 'URL must start with http:// or https://' });
-
+/* -------------------------------------------------------------------------- */
+/* 🟢 1. SHORTEN URL + QR CODE + EXPIRATION + CUSTOM ALIAS                    */
+/* -------------------------------------------------------------------------- */
+export const shortenUrl = async (req, res) => {
   try {
-    let shortCode;
-    if (customCode) {
-      if (!/^[a-zA-Z0-9_-]{4,15}$/.test(customCode))
-        return res.status(400).json({ message: 'Custom code must be 4-15 alphanumeric characters, hyphens, or underscores.' });
+    const { longUrl, customAlias, expiresAt } = req.body;
+    const userId = req.user?._id;
 
-      const existingCustom = await Url.findOne({ shortCode: customCode });
-      if (existingCustom) return res.status(409).json({ message: 'Custom code already in use.' });
-      shortCode = customCode;
+    if (!longUrl)
+      return res.status(400).json({ message: "URL is required" });
+
+    // ✅ Ensure valid protocol
+    if (!/^https?:\/\//i.test(longUrl))
+      return res
+        .status(400)
+        .json({ message: "URL must start with http:// or https://" });
+
+    let shortCode;
+
+    // ✅ Handle custom alias
+    if (customAlias) {
+      const existingAlias = await Url.findOne({ shortCode: customAlias });
+      if (existingAlias)
+        return res
+          .status(409)
+          .json({ message: "Custom alias already in use" });
+      shortCode = customAlias;
     } else {
-      let unique = false;
-      while (!unique) {
+      // ✅ Generate unique short code
+      let isUnique = false;
+      while (!isUnique) {
         const generatedCode = nanoid(8);
-        const existing = await Url.findOne({ shortCode: generatedCode });
-        if (!existing) {
+        const exists = await Url.findOne({ shortCode: generatedCode });
+        if (!exists) {
           shortCode = generatedCode;
-          unique = true;
+          isUnique = true;
         }
       }
     }
 
-    const newUrl = new Url({ longUrl, shortCode, user: userId });
+    const shortUrl = `${BASE_URL}/${shortCode}`;
+    const qrCode = await QRCode.toDataURL(shortUrl);
+    const expiryDate = expiresAt ? new Date(expiresAt) : null;
+
+    const newUrl = new Url({
+      longUrl,
+      shortCode,
+      shortUrl,
+      qrCode,
+      user: userId || null,
+      expiresAt: expiryDate,
+      createdAt: new Date(),
+    });
+
     await newUrl.save();
 
-    res.status(201).json({
+    return res.status(201).json({
+      message: "URL shortened successfully",
       originalUrl: longUrl,
-      shortCode,
-      shortUrl: `${BASE_URL}/${shortCode}`,
+      shortUrl,
+      qrCode,
+      expiresAt: expiryDate,
     });
   } catch (error) {
-    console.error(`Error shortening URL: ${error.message}`);
-    res.status(500).json({ message: 'Server error during URL shortening' });
+    console.error("❌ Error shortening URL:", error.message);
+    res.status(500).json({ message: "Server error during URL shortening" });
   }
 };
 
-// @desc    Redirect to original URL and track clicks
-// @route   GET /:shortCode
-const redirectToOriginalUrl = async (req, res) => {
-  const { shortCode } = req.params;
-  try {
-    const urlEntry = await Url.findOne({ shortCode });
-    if (!urlEntry) return res.status(404).json({ message: 'Short URL not found' });
+// /* -------------------------------------------------------------------------- */
+// /* 🟢 2. REDIRECT + RECORD ANALYTICS                                          */
+// /* -------------------------------------------------------------------------- */
+// export const redirectToOriginalUrl = async (req, res) => {
+//   try {
+//     const { shortCode } = req.params;
+//     const urlEntry = await Url.findOne({ shortCode });
 
-    urlEntry.clicks++;
+//     if (!urlEntry)
+//       return res.status(404).json({ message: "Short URL not found" });
+
+//     // ✅ Check for expiration
+//     if (urlEntry.expiresAt && new Date() > urlEntry.expiresAt)
+//       return res.status(410).json({ message: "This link has expired." });
+
+//     // ✅ GeoIP Lookup
+//     const ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.ip;
+//     const geo = geoip.lookup(ip);
+
+//     // ✅ Record analytics
+//     urlEntry.clicks += 1;
+//     urlEntry.analytics.push({
+//       timestamp: new Date(),
+//       ipAddress: ip,
+//       country: geo?.country || "Unknown",
+//       userAgent: req.headers["user-agent"],
+//       referer: req.headers["referer"] || "Direct",
+//     });
+
+//     await urlEntry.save();
+
+//     // ✅ Redirect to the original URL
+//     return res.redirect(urlEntry.longUrl);
+//   } catch (error) {
+//     console.error("❌ Error redirecting URL:", error.message);
+//     res.status(500).json({ message: "Server error during redirection" });
+//   }
+// };
+
+
+/* -------------------------------------------------------------------------- */
+/* 🟢 REDIRECT + SMART ANALYTICS (with fallback GeoIP)                        */
+/* -------------------------------------------------------------------------- */
+export const redirectToOriginalUrl = async (req, res) => {
+  try {
+    const { shortCode } = req.params;
+    const urlEntry = await Url.findOne({ shortCode });
+
+    if (!urlEntry)
+      return res.status(404).json({ message: "Short URL not found" });
+
+    // ✅ Check for expiration
+    if (urlEntry.expiresAt && new Date() > urlEntry.expiresAt)
+      return res.status(410).json({ message: "This link has expired." });
+
+    // ✅ Trust proxy for real client IP
+    // (Set app.set("trust proxy", true) in your server.js)
+    const ip =
+      req.headers["x-forwarded-for"]?.split(",")[0] ||
+      req.connection.remoteAddress ||
+      req.ip;
+
+    // ✅ Primary geo lookup (geoip-lite)
+    let geo = geoip.lookup(ip);
+    let country = geo?.country || "Unknown";
+
+    // 🌍 Fallback: if geoip-lite fails, use ipapi.co
+    if (country === "Unknown" && !ip.includes("127.0.0.1") && !ip.includes("::1")) {
+      try {
+        const response = await fetch(`https://ipapi.co/${ip}/json/`);
+        const data = await response.json();
+        if (data?.country_name) {
+          country = data.country_name;
+        }
+      } catch (err) {
+        console.warn("⚠️ Fallback geo lookup failed:", err.message);
+      }
+    }
+
+    // ✅ Record analytics
+    urlEntry.clicks += 1;
+    urlEntry.analytics.push({
+      timestamp: new Date(),
+      ipAddress: ip,
+      country,
+      userAgent: req.headers["user-agent"],
+      referer: req.headers["referer"] || "Direct",
+    });
+
     await urlEntry.save();
 
+    // ✅ Redirect to original URL
     return res.redirect(urlEntry.longUrl);
   } catch (error) {
-    console.error(`Error redirecting URL: ${error.message}`);
-    res.status(500).json({ message: 'Server error during redirection' });
+    console.error("❌ Error redirecting URL:", error.message);
+    res.status(500).json({ message: "Server error during redirection" });
   }
 };
 
-// @desc    Get analytics for a short URL
-// @route   GET /api/analytics/:shortCode
-const getUrlAnalytics = async (req, res) => {
-  const { shortCode } = req.params;
 
+
+
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/* 🟢 3. GET URL ANALYTICS                                                    */
+/* -------------------------------------------------------------------------- */
+export const getUrlAnalytics = async (req, res) => {
   try {
-    const urlEntry = await Url.findOne({ shortCode });
-    if (!urlEntry) return res.status(404).json({ message: 'Short URL not found' });
+    const { shortCode } = req.params;
+    const urlDoc = await Url.findOne({ shortCode });
 
+    if (!urlDoc) {
+      return res.status(404).json({ message: "Short URL not found" });
+    }
+
+    // ✅ Handle expired links
+    if (urlDoc.expiresAt && new Date() > urlDoc.expiresAt) {
+      return res.status(410).json({ message: "This link has expired" });
+    }
+
+    const totalClicks = urlDoc.clicks || 0;
+    const { createdAt, expiresAt, analytics = [] } = urlDoc;
+
+    // ✅ Group clicks by date
+    const dailyClicks = analytics.reduce((acc, a) => {
+      const date = new Date(a.timestamp).toISOString().split("T")[0];
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }, {});
+
+    const dailyClicksArray = Object.entries(dailyClicks).map(([date, count]) => ({
+      date,
+      count,
+    }));
+
+    // ✅ Top countries
+    const countryCount = analytics.reduce((acc, a) => {
+      const country = a.country || "Unknown";
+      acc[country] = (acc[country] || 0) + 1;
+      return acc;
+    }, {});
+
+    const topCountries = Object.entries(countryCount)
+      .map(([country, clicks]) => ({ country, clicks }))
+      .sort((a, b) => b.clicks - a.clicks)
+      .slice(0, 5);
+
+    // ✅ Top referrers
+    const referrerCount = analytics.reduce((acc, a) => {
+      const ref = a.referer || "Direct";
+      acc[ref] = (acc[ref] || 0) + 1;
+      return acc;
+    }, {});
+
+    const topReferrers = Object.entries(referrerCount)
+      .map(([referrer, clicks]) => ({ referrer, clicks }))
+      .sort((a, b) => b.clicks - a.clicks)
+      .slice(0, 5);
+
+    // ✅ Response
     res.json({
-      longUrl: urlEntry.longUrl,
-      shortCode: urlEntry.shortCode,
-      totalClicks: urlEntry.clicks,
-      createdAt: urlEntry.createdAt,
-      dailyClicks: [
-        { date: '2025-01-01', count: 45 },
-        { date: '2025-01-02', count: 62 },
-        { date: '2025-01-03', count: 31 },
-      ],
-      topCountries: [
-        { country: 'US', clicks: 100 },
-        { country: 'IN', clicks: 70 },
-      ],
-      topReferrers: [
-        { referrer: 'google.com', clicks: 50 },
-        { referrer: 'facebook.com', clicks: 20 },
-      ],
+      longUrl: urlDoc.longUrl,
+      shortUrl: urlDoc.shortUrl,
+      totalClicks,
+      createdAt,
+      expiresAt,
+      dailyClicks: dailyClicksArray,
+      topCountries,
+      topReferrers,
     });
-  } catch (error) {
-    console.error(`Error fetching analytics: ${error.message}`);
-    res.status(500).json({ message: 'Server error fetching analytics' });
+  } catch (err) {
+    console.error("Analytics error:", err);
+    res.status(500).json({ message: "Failed to fetch analytics" });
   }
 };
 
-// @desc    Get all URLs for authenticated user
-// @route   GET /api/user/links
-// @access  Private
-const getUserUrls = async (req, res) => {
-  const userId = req.user._id;
+
+/* -------------------------------------------------------------------------- */
+/* 🟢 4. GET USER URL LIST                                                    */
+/* -------------------------------------------------------------------------- */
+export const getUserUrls = async (req, res) => {
   try {
+    const userId = req.user._id;
     const userUrls = await Url.find({ user: userId }).sort({ createdAt: -1 });
     res.json(userUrls);
   } catch (error) {
-    console.error(`Error fetching user URLs: ${error.message}`);
-    res.status(500).json({ message: 'Server error fetching user URLs' });
+    console.error("❌ Error fetching user URLs:", error.message);
+    res.status(500).json({ message: "Server error fetching user URLs" });
   }
 };
-
-export { shortenUrl, redirectToOriginalUrl, getUrlAnalytics, getUserUrls };

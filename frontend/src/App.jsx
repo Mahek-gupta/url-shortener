@@ -1,39 +1,9 @@
-// import React from 'react'
-// import Navbar from './components/Navbar'
-// import ShortenForm from './components/ShortenForm'
-// import HomePage from './pages/HomePages'
-// import Hero from './components/Hero'
-
-// const App = () => {
-//   return (
-//     <>
-    
-     
-//     {/* <Navbar/>
-//     <ShortenForm/> */}
-//     <HomePage/>
-//     {/* <Hero/> */}
-   
-//     </>
-//   )
-// }
-
-// export default App
-
-
-
-
-
-
-
-
-// client/src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute'; // We'll create this next
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Page Components
 import HomePage from './pages/HomePages';
@@ -43,19 +13,24 @@ import DashboardPage from './pages/DashboardPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
+// ✅ Only using AnalyticsModal (not AnalyticsPages)
+import AnalyticsModal from './components/AnalyticsModal';
+
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Toaster position="top-right" />
-        <div className="min-h-screen bg-dark-bg text-dark-text font-sans flex flex-col">
+        <div className="min-h-screen bg-gray-200 dark:bg-dark-bg  text-dark-text font-sans flex flex-col ">
           <Navbar />
-          <main className="flex-grow"> {/* main tag to ensure footer stays at bottom */}
+
+          <main className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              {/* Protected Route for Dashboard */}
+
+              {/* ✅ Protected Dashboard */}
               <Route
                 path="/dashboard"
                 element={
@@ -64,10 +39,26 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              {/* You can add a 404 Not Found page here */}
-              <Route path="*" element={<h1 className="text-center text-4xl mt-20">404 - Page Not Found</h1>} />
+
+              {/* ❌ Removed old AnalyticsPage route */}
+              {/* <Route path="/analytics/:shortCode" element={<AnalyticsPages />} /> */}
+
+              {/* ✅ Optional: Direct modal route (if needed for testing) */}
+              {/* <Route path="/analytics" element={<AnalyticsModal />} /> */}
+
+              {/* 404 Page */}
+              <Route
+                path="*"
+                element={
+                  <h1 className="text-center text-4xl mt-20">
+                    404 - Page Not Found
+                  </h1>
+                }
+              />
             </Routes>
           </main>
+
+          {/* Optional Footer */}
           {/* <Footer /> */}
         </div>
       </Router>

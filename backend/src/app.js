@@ -23,6 +23,8 @@ const app = express();
 // Middleware
 app.use(express.json()); // Body parser for JSON
 app.use(cors());         // Enable CORS for frontend communication
+app.set("trust proxy", true);
+
 
 // API Routes
 app.use('/api/auth', authRoutes); // Authentication routes (e.g., /api/auth/register, /api/auth/login)

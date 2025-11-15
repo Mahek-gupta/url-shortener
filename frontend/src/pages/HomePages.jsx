@@ -10,12 +10,13 @@ import Footer from '../components/Footer';
 import { Toaster } from 'react-hot-toast'; // For notifications
 import Hero from '../components/Hero';
 
+
 const HomePages = () => {
   return (
-    <div className="min-h-screen bg-dark-bg text-dark-text font-sans">
+    <div className="min-h-screen bg-dark-bg text-dark-text font-sans ">
       <Toaster position="top-right" />
       {/* <Navbar /> */}
-
+ <div className=" md:pt-19 pt-16">
      
 <Hero/>
       <Features />
@@ -23,9 +24,23 @@ const HomePages = () => {
       <AnalyticsPreview />
       <Testimonials />
       <CTA />
+      </div>
       <Footer />
     </div>
+   
   );
 };
 
 export default HomePages;
+
+
+
+
+
+
+
+
+
+
+
+

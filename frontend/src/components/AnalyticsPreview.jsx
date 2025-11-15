@@ -1,69 +1,16 @@
-// import React from 'react';
-
-// const AnalyticsPreview = () => {
-//   return (
-//     <section className="py-16 bg-dark-bg text-center">
-//       <div className="container mx-auto px-4">
-//         <h2 className="text-3xl md:text-4xl font-extrabold mb-10 gradient-text">
-//           See who's clicking your links and from where.
-//         </h2>
-//         <div className="flex flex-col lg:flex-row items-center justify-center gap-12 bg-dark-card p-8 rounded-lg shadow-xl">
-//           {/* Mockup Graph */}
-//           <div className="w-full lg:w-1/2 p-4 bg-gray-800 rounded-md">
-//             <h3 className="text-xl font-semibold mb-4 text-light-text">Clicks Per Day</h3>
-//             {/* Simple SVG graph placeholder */}
-//             <svg viewBox="0 0 300 150" className="w-full" style={{ 'stroke': '#8B5CF6', 'fill': 'none', 'strokeWidth': '2' }}>
-//               <polyline points="0,100 50,70 100,80 150,50 200,60 250,30 300,40" />
-//               {/* X-axis labels */}
-//               <text x="0" y="140" fill="#9CA3AF" fontSize="10">Day 1</text>
-//               <text x="75" y="140" fill="#9CA3AF" fontSize="10">Day 2</text>
-//               <text x="150" y="140" fill="#9CA3AF" fontSize="10">Day 3</text>
-//               <text x="225" y="140" fill="#9CA3AF" fontSize="10">Day 4</text>
-//               <text x="290" y="140" fill="#9CA3AF" fontSize="10">Day 5</text>
-//             </svg>
-//           </div>
-
-//           {/* Pricing/Plans Mockup - integrated for demo purposes */}
-//           <div className="w-full lg:w-1/2 p-4 flex flex-col items-center justify-center gap-6">
-//             <h3 className="text-xl font-semibold mb-4 text-light-text">Our Plans</h3>
-//             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-lg">
-//               <div className="bg-gray-800 p-4 rounded-md text-center border border-primary-purple">
-//                 <h4 className="font-bold text-lg text-primary-purple">Free</h4>
-//                 <p className="text-sm text-gray-400">Shorten unlimited links</p>
-//                 <p className="text-2xl font-bold mt-2">₹0</p>
-//               </div>
-//               <div className="bg-gray-800 p-4 rounded-md text-center">
-//                 <h4 className="font-bold text-lg">Pro</h4>
-//                 <p className="text-sm text-gray-400">Custom URLs + Analytics</p>
-//                 <p className="text-2xl font-bold mt-2">₹199/mo</p>
-//               </div>
-//               <div className="bg-gray-800 p-4 rounded-md text-center">
-//                 <h4 className="font-bold text-lg">Business</h4>
-//                 <p className="text-sm text-gray-400">API access + branded domains</p>
-//                 <p className="text-2xl font-bold mt-2">₹499/mo</p>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default AnalyticsPreview;
-
-
-
-
-
-
-
-
-
-
 import React from "react";
 import { motion } from "framer-motion";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 const lineData = [
   { name: "Mon", clicks: 20 },
@@ -97,9 +44,9 @@ const cardHover = {
 
 const AnalyticsPreview = () => {
   return (
-    <section className="relative bg-[#0f0f1a] py-24 overflow-hidden text-white">
-      {/* Background gradient glow */}
-      <div className="absolute inset-0  blur-3xl"></div>
+    <section id="pricing" className="relative py-24 overflow-hidden text-gray-900 dark:text-white bg-white/80 dark:bg-[#0f0f1a] transition-colors duration-500">
+      {/* Background glow */}
+      <div className="absolute inset-0 blur-3xl"></div>
 
       <div className="relative max-w-6xl mx-auto px-6">
         {/* Section heading */}
@@ -117,7 +64,7 @@ const AnalyticsPreview = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.7 }}
-          className="text-center text-gray-400 mb-14"
+          className="text-center text-gray-600 dark:text-gray-400 mb-14"
         >
           See who’s clicking your links and from where.
         </motion.p>
@@ -131,8 +78,7 @@ const AnalyticsPreview = () => {
             whileInView="visible"
             whileHover={cardHover}
             viewport={{ once: true }}
-            className="relative bg-gradient-to-br from-[#1a1a2e]/70 to-[#11111f]/70
-              border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-lg"
+            className="relative rounded-2xl p-6 backdrop-blur-xl shadow-lg border border-gray-300 dark:border-white/10 bg-white/80 dark:bg-gradient-to-br dark:from-[#1a1a2e] dark:to-[#11111f] transition-all duration-300"
           >
             <motion.h3
               className="text-lg font-semibold mb-4"
@@ -180,9 +126,7 @@ const AnalyticsPreview = () => {
             whileInView="visible"
             whileHover={cardHover}
             viewport={{ once: true }}
-            className="relative flex flex-col justify-center items-center text-center
-              bg-gradient-to-br from-[#1a1a2e]/70 to-[#11111f]/70
-              border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-lg"
+            className="relative flex flex-col justify-center items-center text-center rounded-2xl p-6 backdrop-blur-xl shadow-lg border border-gray-300 dark:border-white/10 bg-white/80 dark:bg-gradient-to-br dark:from-[#1a1a2e]/100 dark:to-[#11111f]/100 transition-all duration-300"
           >
             <h3 className="text-lg font-semibold mb-3">Shorten unlimited links</h3>
             <motion.p
@@ -192,7 +136,9 @@ const AnalyticsPreview = () => {
             >
               Free
             </motion.p>
-            <p className="text-gray-400 text-sm">Custom short URLs</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              Custom short URLs
+            </p>
             <motion.p
               className="text-xl mt-2"
               initial={{ opacity: 0 }}
@@ -210,8 +156,7 @@ const AnalyticsPreview = () => {
             whileInView="visible"
             whileHover={cardHover}
             viewport={{ once: true }}
-            className="relative bg-gradient-to-br from-[#1a1a2e]/70 to-[#11111f]/70
-              border border-white/10 rounded-2xl p-6 backdrop-blur-xl shadow-lg text-center"
+            className="relative rounded-2xl p-6 backdrop-blur-xl shadow-lg border border-gray-300 dark:border-white/10 bg-white/80 dark:bg-gradient-to-br dark:from-[#1a1a2e] dark:to-[#11111f] text-center transition-all duration-300"
           >
             <h3 className="text-lg font-semibold mb-4">Top Countries</h3>
             <div className="flex justify-center items-center h-48">
@@ -231,10 +176,12 @@ const AnalyticsPreview = () => {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <p className="text-gray-400 text-sm mt-2">
+            <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
               Business <br />
               API access + analytics <br />
-              <span className="text-white font-semibold">₹499/mo</span>
+              <span className="text-gray-900 dark:text-white font-semibold">
+                ₹499/mo
+              </span>
             </p>
           </motion.div>
         </div>
@@ -244,3 +191,4 @@ const AnalyticsPreview = () => {
 };
 
 export default AnalyticsPreview;
+

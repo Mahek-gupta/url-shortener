@@ -1,376 +1,76 @@
-// import React, { useState } from 'react';
-// import { toast } from 'react-hot-toast'; // npm install react-hot-toast
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
+import { QRCodeCanvas } from "qrcode.react";
+import { useAuth } from "../context/AuthContext";
+import AnalyticsModal from "./AnalyticsModal";
 
-// const ShortenForm = () => {
-//   const [longUrl, setLongUrl] = useState('');
-//   const [shortUrl, setShortUrl] = useState('');
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-
-//   // ✅ Function to handle URL shortening
-//   const handleShorten = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     setError(null);
-//     setShortUrl('');
-
-//     try {
-//       // Replace with your actual API endpoint
-//       const response = await fetch('http://localhost:5000/api/shorten', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ longUrl }),
-//       });
-
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.message || 'Failed to shorten URL');
-//       }
-
-//       const data = await response.json();
-//       setShortUrl(`http://localhost:5000/${data.shortCode}`); // Assuming shortCode from API
-//       toast.success('URL shortened successfully!');
-//     } catch (err) {
-//       setError(err.message);
-//       toast.error(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // ✅ Modern Clipboard API copy function
-//   const handleCopy = async () => {
-//     try {
-//       await navigator.clipboard.writeText(shortUrl);
-//       toast.success('Copied to clipboard!');
-//     } catch (err) {
-//       toast.error('Failed to copy!');
-//     }
-//   };
-
-//   return (
-//     <form
-//       onSubmit={handleShorten}
-//       className="mt-8 p-6 bg-dark-card rounded-lg shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-70 border border-gray-700"
-//     >
-//       <div className="flex flex-col md:flex-row gap-4">
-//         <input
-//           type="url"
-//           placeholder="https://verylonglink.com/article/..."
-//           className="flex-grow p-3 rounded-md bg-gray-800 border border-gray-700 text-dark-text placeholder-gray-500 focus:ring-primary-purple focus:border-primary-purple outline-none"
-//           value={longUrl}
-//           onChange={(e) => setLongUrl(e.target.value)}
-//           required
-//         />
-//         <button
-//           type="submit"
-//           className=" px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-//           disabled={loading}
-//         >
-//           {loading ? 'Shortening...' : 'Shorten Now'}
-//         </button>
-//       </div>
-
-//       {shortUrl && (
-//         <div className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md border border-gray-700">
-//           <a
-//             href={shortUrl}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             className="text-primary-purple hover:underline"
-//           >
-//             {shortUrl}
-//           </a>
-//           <button
-//             type="button"
-//             onClick={handleCopy}
-//             className="ml-4 px-4 py-2 bg-gray-700 text-dark-text rounded-md hover:bg-gray-600 transition-colors"
-//           >
-//             Copy
-//           </button>
-//         </div>
-//       )}
-
-//       {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
-//     </form>
-//   );
-// };
-
-// export default ShortenForm;
-
-
-
-// import React, { useState } from "react";
-// import { motion } from "framer-motion";
-
-// const ShortenForm = () => {
-//   const [url, setUrl] = useState("");
-//   const [shortUrl, setShortUrl] = useState("");
-
-//   const handleShorten = () => {
-//     if (!url) return;
-//     setShortUrl("short.ly/" + Math.random().toString(36).slice(6, 12));
-//   };
-
-//   const handleCopy = () => {
-//     navigator.clipboard.writeText(shortUrl);
-//     alert("Copied to clipboard!");
-//   };
-
-//   return (
-//     <motion.div
-//       initial={{ opacity: 0, scale: 0.95 }}
-//       animate={{ opacity: 1, scale: 1 }}
-//       transition={{ delay: 1, duration: 0.6 }}
-//       className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-lg p-5 flex flex-col md:flex-row gap-4 items-center"
-//     >
-//       <input
-//         type="text"
-//         placeholder="https://verylonglink.com/article/..."
-//         value={url}
-//         onChange={(e) => setUrl(e.target.value)}
-//         className="flex-grow bg-transparent text-gray-200 placeholder-gray-400 px-4 py-3 rounded-lg border border-white/20 focus:ring-2 focus:ring-purple-500 outline-none"
-//       />
-
-//       {/* Glow animated button */}
-//       <motion.button
-//         whileHover={{
-//           scale: 1.05,
-//           boxShadow: "0 0 15px rgba(168, 85, 247, 0.7)",
-//         }}
-//         whileTap={{ scale: 0.95 }}
-//         onClick={handleShorten}
-//         className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg transition-all duration-300"
-//       >
-//         Shorten Now
-//       </motion.button>
-
-//       {shortUrl && (
-//         <motion.div
-//           initial={{ opacity: 0, y: 10 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 0.4 }}
-//           className="flex justify-between items-center w-full md:w-auto bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-sm text-gray-300"
-//         >
-//           <span>{shortUrl}</span>
-//           <button onClick={handleCopy} className="text-purple-400 hover:text-purple-300">
-//             Copy
-//           </button>
-//         </motion.div>
-//       )}
-//     </motion.div>
-//   );
-// };
-
-// export default ShortenForm;
-
-
-
-// import React, { useState } from 'react';
-// import { motion } from 'framer-motion'; // Import motion from framer-motion
-// import { toast } from 'react-hot-toast'; // npm install react-hot-toast
-
-// const ShortenForm = () => {
-//   const [longUrl, setLongUrl] = useState('');
-//   const [shortUrl, setShortUrl] = useState('');
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-
-//   // Function to handle URL shortening
-//   const handleShorten = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     setError(null);
-//     setShortUrl(''); // Clear previous short URL
-
-//     if (!longUrl.trim()) {
-//       setError('Please enter a URL.');
-//       toast.error('Please enter a URL.');
-//       setLoading(false);
-//       return;
-//     }
-
-//     try {
-//       // Replace with your actual API endpoint
-//       const response = await fetch('http://localhost:5000/api/shorten', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ longUrl }),
-//       });
-
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.message || 'Failed to shorten URL');
-//       }
-
-//       const data = await response.json();
-//       // Ensure data.shortCode exists and is used
-//       setShortUrl(`http://localhost:5000/${data.shortCode}`); // Assuming shortCode from API response
-//       toast.success('URL shortened successfully!');
-//     } catch (err) {
-//       setError(err.message);
-//       toast.error(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Modern Clipboard API copy function
-//   const handleCopy = async () => {
-//     try {
-//       await navigator.clipboard.writeText(shortUrl);
-//       toast.success('Copied to clipboard!');
-//     } catch (err) {
-//       toast.error('Failed to copy!');
-//       console.error('Failed to copy text:', err);
-//     }
-//   };
-
-//   return (
-//     <motion.form
-//       onSubmit={handleShorten}
-//       // Framer Motion properties for the form container
-//       initial={{ opacity: 0, y: 20 }}
-//       animate={{ opacity: 1, y: 0 }}
-//       transition={{ delay: 0.5, duration: 0.6 }} // Adjust delay if needed with Hero component's delay
-//       className="mt-8 p-6 hover:glow  rounded-lg shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-70 border border-gray-700"
-//     >
-//       <div className="flex flex-col md:flex-row gap-4">
-//         <input
-//           type="url" // Use type="url" for better browser validation
-//           placeholder="https://verylonglink.com/article/..."
-//           className="flex-grow p-3 rounded-md bg-gray-800 border border-gray-700 text-dark-text placeholder-gray-500 focus:ring-primary-purple focus:border-primary-purple outline-none"
-//           value={longUrl}
-//           onChange={(e) => setLongUrl(e.target.value)}
-//           required
-//         />
-//         {/* Glow animated button */}
-//         <motion.button
-//           type="submit"
-//           whileHover={{
-//             scale: 1.05,
-//             boxShadow: "0 0 15px rgba(168, 85, 247, 0.7)", // Example glow effect
-//           }}
-//           whileTap={{ scale: 0.95 }}
-//           className="px-6 py-3 rounded-full font-semibold transition-all duration-300
-//                      bg-gradient-to-r  from-purple-800 to-pink-500 text-white
-//                      disabled:opacity-50 disabled:cursor-not-allowed"
-//           disabled={loading}
-//         >
-//           {loading ? 'Shortening...' : 'Shorten Now'}
-//         </motion.button>
-//       </div>
-
-//       {shortUrl && (
-//         <motion.div
-//           initial={{ opacity: 0, y: 10 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 0.4 }}
-//           className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md border border-gray-700"
-//         >
-//           <a
-//             href={shortUrl}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             className="text-primary-purple hover:underline"
-//           >
-//             {shortUrl}
-//           </a>
-//           <button
-//             type="button"
-//             onClick={handleCopy}
-//             className="ml-4 px-4 py-2 bg-gray-700 text-dark-text rounded-md hover:bg-gray-600 transition-colors"
-//           >
-//             Copy
-//           </button>
-//         </motion.div>
-//       )}
-
-//       {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
-//     </motion.form>
-//   );
-// };
-
-// export default ShortenForm;
-
-
-
-
-
-
-
-// client/src/components/ShortenForm.jsx
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'react-hot-toast';
-import { useAuth } from '../context/AuthContext'; // Import useAuth to get the token
-
-// Accept onLinkShortened prop
 const ShortenForm = ({ onLinkShortened }) => {
-  const [longUrl, setLongUrl] = useState('');
-  const [shortUrl, setShortUrl] = useState('');
+  const [longUrl, setLongUrl] = useState("");
+  const [customAlias, setCustomAlias] = useState("");
+  const [expiresAt, setExpiresAt] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
+  const [qrCode, setQrCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
-  const { token, isAuthenticated } = useAuth(); // Get token and auth status
+  const { token, isAuthenticated } = useAuth();
 
-  // Function to handle URL shortening
+  // ✅ Handle URL shortening
   const handleShorten = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setShortUrl(''); // Clear previous short URL
 
     if (!longUrl.trim()) {
-      setError('Please enter a URL.');
-      toast.error('Please enter a URL.');
+      toast.error("Please enter a valid URL.");
       setLoading(false);
       return;
     }
 
     try {
-      const headers = { 'Content-Type': 'application/json' };
-      if (isAuthenticated && token) {
-        headers['Authorization'] = `Bearer ${token}`; // Add token for authenticated requests
-      }
+      const headers = { "Content-Type": "application/json" };
+      if (isAuthenticated && token)
+        headers["Authorization"] = `Bearer ${token}`;
 
-      const response = await fetch('http://localhost:5000/api/shorten', {
-        method: 'POST',
-        headers: headers, // Use the headers object
-        body: JSON.stringify({ longUrl }),
+      const response = await fetch("http://localhost:5000/api/shorten", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ longUrl, customAlias, expiresAt }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to shorten URL');
-      }
-
       const data = await response.json();
-      setShortUrl(`http://localhost:5000/${data.shortCode}`);
-      toast.success('URL shortened successfully!');
+      if (!response.ok) throw new Error(data.message || "Failed to shorten URL");
 
-      // NEW: Call the callback function if provided
-      if (onLinkShortened) {
-        onLinkShortened();
-      }
+      setShortUrl(data.shortUrl);
+      setQrCode(data.qrCode);
+      toast.success("URL shortened successfully!");
 
+      if (onLinkShortened) onLinkShortened();
     } catch (err) {
       setError(err.message);
       toast.error(err.message);
     } finally {
       setLoading(false);
-      setLongUrl(''); // Clear input field after successful shorten
     }
   };
 
-  // Modern Clipboard API copy function (unchanged)
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(shortUrl);
-      toast.success('Copied to clipboard!');
-    } catch (err) {
-      toast.error('Failed to copy!');
-      console.error('Failed to copy text:', err);
+      toast.success("Copied to clipboard!");
+    } catch {
+      toast.error("Failed to copy!");
+    }
+  };
+
+  const getShortCode = () => {
+    try {
+      const parts = shortUrl.split("/");
+      return parts.pop() || parts.pop();
+    } catch {
+      return "";
     }
   };
 
@@ -379,60 +79,187 @@ const ShortenForm = ({ onLinkShortened }) => {
       onSubmit={handleShorten}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5, duration: 0.6 }}
-      className="mt-8 p-6 bg-dark-card rounded-lg shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-70 border border-gray-700"
+      transition={{ delay: 0.3, duration: 0.5 }}
+      className="
+        mt-8 p-8 rounded-3xl border 
+        backdrop-blur-xl bg-white/15 dark:bg-gray-900/40
+        border-white/20 shadow-lg 
+        hover:shadow-2xl 
+        transition-all duration-500 
+        text-center relative overflow-hidden
+      "
     >
-      <div className="flex flex-col md:flex-row gap-4">
+      {/* ✨ Soft gradient glow background */}
+      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 blur-3xl -z-10"></div>
+
+      {/* 🔗 Input Fields */}
+      <div className="flex flex-col gap-4">
         <input
           type="url"
-          placeholder="https://verylonglink.com/article/..."
-          className="flex-grow p-3 rounded-md bg-gray-800 border border-gray-700 text-dark-text placeholder-gray-500 focus:ring-primary-purple focus:border-primary-purple outline-none"
+          placeholder="Enter your long URL (e.g. https://example.com)"
+          className="
+            p-3 rounded-lg border border-white/20
+            bg-white/20 dark:bg-gray-800/40 
+            text-gray-900 dark:text-gray-100
+            placeholder-gray-500 focus:ring-2 
+            focus:ring-purple-500 focus:outline-none
+            transition-all duration-300
+          "
           value={longUrl}
           onChange={(e) => setLongUrl(e.target.value)}
           required
         />
+
+        <input
+          type="text"
+          placeholder="Custom alias (optional)"
+          className="
+            p-3 rounded-lg border border-white/20
+            bg-white/20 dark:bg-gray-800/40 
+            text-gray-900 dark:text-gray-100
+            placeholder-gray-500 focus:ring-2 
+            focus:ring-purple-500 focus:outline-none
+            transition-all duration-300
+          "
+          value={customAlias}
+          onChange={(e) => setCustomAlias(e.target.value)}
+        />
+
+        <input
+          type="date"
+          className="
+            p-3 rounded-lg border border-white/20
+            bg-white/20 dark:bg-gray-800/40 
+            text-gray-900 dark:text-gray-100
+            focus:ring-2 focus:ring-purple-500 focus:outline-none
+            transition-all duration-300
+          "
+          value={expiresAt}
+          onChange={(e) => setExpiresAt(e.target.value)}
+        />
+
         <motion.button
           type="submit"
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0 0 15px rgba(168, 85, 247, 0.7)",
-          }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 rounded-full font-semibold transition-all duration-300
-                     bg-gradient-to-r from-purple-500 to-pink-500 text-white
-                     disabled:opacity-50 disabled:cursor-not-allowed"
+          className="
+            px-6 py-3 rounded-full font-semibold
+            bg-gradient-to-r from-purple-500 to-pink-500
+            text-white shadow-lg hover:shadow-purple-500/40
+            transition-all duration-300 disabled:opacity-50
+          "
           disabled={loading}
         >
-          {loading ? 'Shortening...' : 'Shorten Now'}
+          {loading ? "Shortening..." : "Shorten URL"}
         </motion.button>
       </div>
 
+      {/* 🔗 Shortened Result */}
       {shortUrl && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md border border-gray-700"
+          className="
+            mt-6 p-5 rounded-xl border border-white/20 
+            bg-white/20 dark:bg-gray-800/40 
+            shadow-inner backdrop-blur-lg
+          "
         >
           <a
             href={shortUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary-purple hover:underline"
+            className="text-purple-400 hover:underline break-all block mb-2"
           >
             {shortUrl}
           </a>
+
           <button
             type="button"
             onClick={handleCopy}
-            className="ml-4 px-4 py-2 bg-gray-700 text-dark-text rounded-md hover:bg-gray-600 transition-colors"
+            className="
+              mb-3 px-4 py-2 rounded-md 
+              bg-gray-200/20 dark:bg-gray-700/40 
+              text-gray-900 dark:text-gray-200 
+              hover:bg-gray-300/30 dark:hover:bg-gray-600/40 
+              transition-all duration-300
+            "
           >
             Copy
+          </button>
+
+          {/* 💎 Holographic QR Card with 3D tilt + Glow */}
+          <motion.div
+            className="
+              relative inline-block p-[2px] rounded-2xl 
+              bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500
+              mx-auto
+            "
+            whileHover={{
+              scale: 1.05,
+              rotateY: 10,
+              rotateX: -5,
+            }}
+            transition={{ type: "spring", stiffness: 200, damping: 10 }}
+          >
+            <div
+              className="
+                bg-white/10 dark:bg-gray-800/50 
+                rounded-2xl p-4 backdrop-blur-md shadow-inner
+              "
+            >
+              {qrCode ? (
+                <img src={qrCode} alt="QR Code" className="w-32 h-32 mx-auto" />
+              ) : (
+                <QRCodeCanvas value={shortUrl} size={128} />
+              )}
+            </div>
+
+            {/* ✨ Animated Glow Ring */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-400/40 to-pink-400/40 blur-lg -z-10"
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </motion.div>
+
+          <p className="text-gray-400 mt-2 text-sm">
+            Scan this QR to open the link
+          </p>
+
+          <button
+            type="button"
+            onClick={() => setShowAnalytics(true)}
+            className="
+              mt-4 px-5 py-2 rounded-md font-medium
+              bg-gradient-to-r from-purple-600 to-pink-500 
+              text-white hover:from-purple-700 hover:to-pink-600 
+              shadow-lg hover:shadow-purple-500/30
+              transition-all duration-300
+            "
+          >
+            View Analytics
           </button>
         </motion.div>
       )}
 
       {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
+
+      {/* 🧠 Analytics Modal */}
+      {showAnalytics && (
+        <AnalyticsModal
+          shortCode={getShortCode()}
+          onClose={() => setShowAnalytics(false)}
+        />
+      )}
     </motion.form>
   );
 };
