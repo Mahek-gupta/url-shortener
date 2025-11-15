@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
 import React from "react";
 import { motion } from "framer-motion";
 import { Github, Twitter, Linkedin } from "lucide-react";
@@ -6,7 +9,13 @@ import Logo from "./Logo";
 
 const Footer = () => {
   return (
+<<<<<<< HEAD
     <footer id="contact" className="relative bg-white/70 dark:bg-[#0f0f1a] dark:text-gray-400 py-16 overflow-hidden border-t border-white/10 dark:border-white/5 backdrop-blur-lg">
+=======
+    <footer id="contact" className="relative bg-[#0f0f1a] text-gray-400 py-12 overflow-hidden border-t border-white/10 backdrop-blur-md">
+      {/* Glow background effect */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-purple-600/10 via-pink-500/5 to-transparent blur-3xl"></div>
+>>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
 
       {/* ====================================================== */}
       {/* 🔵 FLOATING GLASSMORPHIC CIRCLE (LEFT) */}

@@ -82,6 +82,7 @@ const Features = () => {
   ];
 
   return (
+<<<<<<< HEAD
     <section
       id="features"
       className="
@@ -90,6 +91,9 @@ const Features = () => {
         text-center transition-colors duration-500
       "
     >
+=======
+    <section id="features" className="py-20 bg-[#0f0f1a] text-center overflow-hidden">
+>>>>>>> 5cf4246ee368a99d580ae55c7779d211ab230ada
       <div className="container mx-auto px-6 max-w-7xl">
         {/* Heading */}
         <h2
