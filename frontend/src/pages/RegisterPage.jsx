@@ -32,7 +32,7 @@ const RegisterPage = () => {
 
     if (success) {
       toast.success("Account created successfully!", { id: toastId });
-      navigate('/dashboard');
+      navigate('/login');
     } else {
       toast.error("Registration failed! Try again.", { id: toastId });
     }
