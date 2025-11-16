@@ -56,37 +56,32 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle registration
   const register = async (username, email, password) => {
-    setLoading(true);
-    try {
-      const response = await fetch('https://backend-url-shortener1.onrender.com/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+  setLoading(true);
+  try {
+    const response = await fetch(
+      "https://backend-url-shortener1.onrender.com/api/auth/register",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
       }
+    );
 
-      setUser({ _id: data._id, username: data.username, email: data.email });
-      setToken(data.token);
-      localStorage.setItem('user', JSON.stringify({ _id: data._id, username: data.username, email: data.email }));
-      localStorage.setItem('token', data.token);
-      toast.success('Account created and logged in!');
-      return true; // Indicate success
-    } catch (error) {
-      toast.error(error.message);
-      setUser(null);
-      setToken(null);
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      return false; // Indicate failure
-    } finally {
-      setLoading(false);
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Registration failed");
     }
-  };
+
+    toast.success("Account created successfully! Please login.");
+    return true; // Registration success
+  } catch (error) {
+    toast.error(error.message);
+    return false; // Registration failed
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Function to handle logout
   const logout = () => {
